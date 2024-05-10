@@ -20,13 +20,12 @@ module.exports.index = async (req, res) => {
         },
     ];
 
-    const filterValue = req.query.status;
-
     let find = {
         deleted: false,
     };
 
-    if (filterValue) {
+    if (req.query.status) {
+        const filterValue = req.query.status;
         find.status = filterValue;
         const indexStatus = filterButton.findIndex(
             (item) => item.status == filterValue
@@ -37,11 +36,19 @@ module.exports.index = async (req, res) => {
         filterButton[0].class = 'active';
     }
 
+    let keyword = '';
+    if (req.query.keyword) {
+        keyword = req.query.keyword;
+        const regex = new RegExp(keyword, 'i');
+        find.title = regex;
+    }
+
     const products = await Product.find(find);
 
     res.render('admin/pages/product/index.pug', {
         pageTitle: 'Trang sản phẩm',
         products: products,
         filterButton: filterButton,
+        keyword: keyword,
     });
 };
