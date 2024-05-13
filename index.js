@@ -1,4 +1,5 @@
 const express = require('express');
+const methodOverride = require('method-override');
 const datbase = require('./config/database');
 const routeAdmin = require('./routes/admin/index.route');
 const route = require('./routes/client/index.route');
@@ -8,6 +9,9 @@ require('dotenv').config();
 // Khai báo app, port
 const app = express();
 const port = process.env.PORT;
+
+// Method
+app.use(methodOverride('_method'));
 
 // Database
 datbase.connect();
