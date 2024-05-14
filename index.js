@@ -1,5 +1,7 @@
 const express = require('express');
 const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
+
 const datbase = require('./config/database');
 const routeAdmin = require('./routes/admin/index.route');
 const route = require('./routes/client/index.route');
@@ -12,6 +14,9 @@ const port = process.env.PORT;
 
 // Method
 app.use(methodOverride('_method'));
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Database
 datbase.connect();
