@@ -90,6 +90,19 @@ if (formChangeMulti) {
         );
 
         if (inputsChecked.length > 0) {
+            const type = e.target.elements.type.value;
+            if (type == '') {
+                alert('Vui lòng chọn hành động !');
+                return;
+            } else if (type == 'delete') {
+                const isConfirm = confirm(
+                    'Bạn có chắc chắn muốn xóa những sản phẩm này?'
+                );
+                if (!isConfirm) {
+                    return;
+                }
+            }
+
             let ids = [];
             const inputIds = formChangeMulti.querySelector("input[name='ids']");
             inputsChecked.forEach((input) => {
