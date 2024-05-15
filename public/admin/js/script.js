@@ -107,7 +107,15 @@ if (formChangeMulti) {
             const inputIds = formChangeMulti.querySelector("input[name='ids']");
             inputsChecked.forEach((input) => {
                 const id = input.value;
-                ids.push(id);
+                if (type == 'position') {
+                    const inputPosition = input
+                        .closest('tr')
+                        .querySelector("input[name='position']");
+
+                    ids.push(`${id}-${inputPosition.value}`);
+                } else {
+                    ids.push(id);
+                }
             });
             inputIds.value = ids.join(', ');
             formChangeMulti.submit();
