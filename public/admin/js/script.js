@@ -108,11 +108,13 @@ if (formChangeMulti) {
             inputsChecked.forEach((input) => {
                 const id = input.value;
                 if (type == 'position') {
-                    const inputPosition = input
-                        .closest('tr')
-                        .querySelector("input[name='position']");
+                    const position = parseInt(
+                        input
+                            .closest('tr')
+                            .querySelector("input[name='position']").value
+                    );
 
-                    ids.push(`${id}-${inputPosition.value}`);
+                    ids.push(`${id}-${position}`);
                 } else {
                     ids.push(id);
                 }
@@ -122,5 +124,20 @@ if (formChangeMulti) {
         } else {
             alert('Vui lòng chọn ít nhất 1 sản phẩm !');
         }
+    });
+}
+
+// Show alert
+const showAlert = document.querySelector('[show-alert]');
+if (showAlert) {
+    const time = parseInt(showAlert.getAttribute('data-time'));
+    const close = showAlert.querySelector('[close-alert]');
+
+    setTimeout(() => {
+        showAlert.classList.add('alert-hidden');
+    }, time);
+
+    close.addEventListener('click', () => {
+        showAlert.classList.add('alert-hidden');
     });
 }
