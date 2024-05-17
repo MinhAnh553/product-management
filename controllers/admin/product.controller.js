@@ -134,7 +134,7 @@ module.exports.changeMulti = async (req, res) => {
     res.redirect('back');
 };
 
-// [DELETE] /admin/delete/:id
+// [DELETE] /admin/product/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
 
@@ -153,6 +153,31 @@ module.exports.deleteItem = async (req, res) => {
     );
 
     req.flash('success', `Xóa sản phẩm thành công!`);
+
+    res.redirect('back');
+};
+
+// [GET] /admin/product/create
+module.exports.pageCreate = (req, res) => {
+    res.render('admin/pages/product/create');
+};
+
+// [POST] /admin/product/create
+module.exports.createProduct = async (req, res) => {
+    const data = req.body;
+
+    data.price = parseInt(data.price);
+    data.discountPercentage = parseInt(data.discountPercentage);
+    data.stock = parseInt(data.stock);
+    if (data.position == '') {
+        const countProduct = await Product.countDocuments();
+        data.position = parseInt(countProduct + 1);
+    } else {
+        data.position = parseInt(data.position);
+    }
+
+    const product = new Product(data);
+    await product.save();
 
     res.redirect('back');
 };

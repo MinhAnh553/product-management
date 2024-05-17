@@ -9,4 +9,7 @@ router.patch('/change-multi', controller.changeMulti);
 
 router.delete('/delete/:id', controller.deleteItem);
 
+router.get('/create', controller.pageCreate);
+router.post('/create', controller.createProduct);
+
 module.exports = router;
