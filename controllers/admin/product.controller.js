@@ -165,10 +165,10 @@ module.exports.pageCreate = (req, res) => {
 // [POST] /admin/product/create
 module.exports.createProduct = async (req, res) => {
     const data = req.body;
-
     data.price = parseInt(data.price);
     data.discountPercentage = parseInt(data.discountPercentage);
     data.stock = parseInt(data.stock);
+    data.thumbnail = `/uploads/${req.file.filename}`;
     if (data.position == '') {
         const countProduct = await Product.countDocuments();
         data.position = parseInt(countProduct + 1);
