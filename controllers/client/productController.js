@@ -1,11 +1,13 @@
-const Product = require('../../models/product.model');
+const productModel = require('../../models/productModel');
 
 // [GET] /products
 module.exports.index = async (req, res) => {
-    const products = await Product.find({
-        status: 'active',
-        deleted: false,
-    }).sort({ position: 'desc' });
+    const products = await productModel
+        .find({
+            status: 'active',
+            deleted: false,
+        })
+        .sort({ position: 'desc' });
 
     const newProducts = products.map((item) => {
         item.priceNew = (

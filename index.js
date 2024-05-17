@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const datbase = require('./config/database');
-const routeAdmin = require('./routes/admin/index.route');
-const route = require('./routes/client/index.route');
+const routeAdmin = require('./routes/admin/indexRoute');
+const route = require('./routes/client/indexRoute');
 const system = require('./config/system');
 require('dotenv').config();
 

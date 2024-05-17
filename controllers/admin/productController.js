@@ -1,6 +1,6 @@
-const Product = require('../../models/product.model');
-const filterStatusHelper = require('../../helpers/filterStatus');
-const searchHelper = require('../../helpers/search');
+const productModel = require('../../models/productModel.js');
+const filterStatusHelper = require('../../helpers/filterStatus.js');
+const searchHelper = require('../../helpers/search.js');
 const paginationHelper = require('../../helpers/pagination.js');
 
 // [GET] /admin/product
@@ -21,7 +21,7 @@ module.exports.index = async (req, res) => {
         find.title = objectSearch.regex;
     }
 
-    const totalProduct = await Product.countDocuments();
+    const totalProduct = await productModel.countDocuments();
     const objectPagination = paginationHelper(
         {
             currentPage: 1,
@@ -31,7 +31,8 @@ module.exports.index = async (req, res) => {
         totalProduct
     );
 
-    const products = await Product.find(find)
+    const products = await productModel
+        .find(find)
         .sort({ position: 'desc' })
         .limit(objectPagination.limitProduct)
         .skip(objectPagination.skip);
@@ -50,7 +51,7 @@ module.exports.changeStatus = async (req, res) => {
     const id = req.params.id;
     const status = req.params.status;
 
-    await Product.updateOne({ _id: id }, { status: status });
+    await productModel.updateOne({ _id: id }, { status: status });
 
     req.flash('success', 'Đổi trạng thái sản phẩm thành công!');
 
@@ -64,7 +65,7 @@ module.exports.changeMulti = async (req, res) => {
 
     switch (type) {
         case 'active':
-            await Product.updateMany(
+            await productModel.updateMany(
                 {
                     _id: { $in: ids },
                 },
@@ -79,7 +80,7 @@ module.exports.changeMulti = async (req, res) => {
             break;
 
         case 'inactive':
-            await Product.updateMany(
+            await productModel.updateMany(
                 {
                     _id: { $in: ids },
                 },
@@ -94,7 +95,7 @@ module.exports.changeMulti = async (req, res) => {
             break;
 
         case 'delete':
-            await Product.updateMany(
+            await productModel.updateMany(
                 {
                     _id: { $in: ids },
                 },
@@ -111,7 +112,7 @@ module.exports.changeMulti = async (req, res) => {
         case 'position':
             for (const item of ids) {
                 const [id, position] = item.split('-');
-                await Product.updateOne(
+                await productModel.updateOne(
                     {
                         _id: id,
                     },
@@ -138,11 +139,11 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
 
-    // await Product.deleteOne({
+    // await productModel.deleteOne({
     //     _id: id,
     // });
 
-    await Product.updateOne(
+    await productModel.updateOne(
         {
             _id: id,
         },
@@ -168,9 +169,11 @@ module.exports.createProduct = async (req, res) => {
     data.price = parseInt(data.price);
     data.discountPercentage = parseInt(data.discountPercentage);
     data.stock = parseInt(data.stock);
-    data.thumbnail = `/uploads/${req.file.filename}`;
+    if (req.file) {
+        data.thumbnail = `/uploads/${req.file.filename}`;
+    }
     if (data.position == '') {
-        const countProduct = await Product.countDocuments();
+        const countProduct = await productModel.countDocuments();
         data.position = parseInt(countProduct + 1);
     } else {
         data.position = parseInt(data.position);
