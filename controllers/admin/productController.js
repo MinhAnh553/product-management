@@ -179,7 +179,7 @@ module.exports.createProduct = async (req, res) => {
         data.position = parseInt(data.position);
     }
 
-    const product = new Product(data);
+    const product = new productModel(data);
     await product.save();
 
     res.redirect('back');
