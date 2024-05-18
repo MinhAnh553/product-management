@@ -2,8 +2,9 @@ const productModel = require('../../models/productModel.js');
 const filterStatusHelper = require('../../helpers/filterStatus.js');
 const searchHelper = require('../../helpers/search.js');
 const paginationHelper = require('../../helpers/pagination.js');
+const system = require('../../config/system.js');
 
-// [GET] /admin/product
+// [GET] /admin/products
 module.exports.index = async (req, res) => {
     const filterButton = filterStatusHelper(req);
 
@@ -46,7 +47,7 @@ module.exports.index = async (req, res) => {
     });
 };
 
-// [PATCH] /admin/product/change-status/:status/:id
+// [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const id = req.params.id;
     const status = req.params.status;
@@ -58,7 +59,7 @@ module.exports.changeStatus = async (req, res) => {
     res.redirect('back');
 };
 
-// [PATCH] /admin/product/change-multi
+// [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(', ');
@@ -135,7 +136,7 @@ module.exports.changeMulti = async (req, res) => {
     res.redirect('back');
 };
 
-// [DELETE] /admin/product/delete/:id
+// [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
 
@@ -158,12 +159,12 @@ module.exports.deleteItem = async (req, res) => {
     res.redirect('back');
 };
 
-// [GET] /admin/product/create
+// [GET] /admin/products/create
 module.exports.pageCreate = (req, res) => {
     res.render('admin/pages/product/create');
 };
 
-// [POST] /admin/product/create
+// [POST] /admin/products/create
 module.exports.createProduct = async (req, res) => {
     const data = req.body;
     data.price = parseInt(data.price);
@@ -182,5 +183,51 @@ module.exports.createProduct = async (req, res) => {
     const product = new productModel(data);
     await product.save();
 
+    res.redirect('back');
+};
+
+// [GET] /admin/products/edit/:id
+module.exports.pageEdit = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const find = {
+            _id: id,
+            deleted: false,
+        };
+
+        const product = await productModel.findOne(find);
+        res.render('admin/pages/product/edit', {
+            product: product,
+        });
+    } catch (error) {
+        res.redirect(`${system.prefixAdmin}/products`);
+    }
+};
+
+// [PATCH] /admin/products/edit/:id
+module.exports.updateProduct = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = req.body;
+        data.price = parseInt(data.price);
+        data.discountPercentage = parseInt(data.discountPercentage);
+        data.stock = parseInt(data.stock);
+        if (req.file) {
+            data.thumbnail = `/uploads/${req.file.filename}`;
+        }
+
+        data.position = parseInt(data.position);
+
+        await productModel.updateOne(
+            {
+                _id: id,
+            },
+            data
+        );
+
+        req.flash('success', 'Cập nhật sản phẩm thành công!');
+    } catch (error) {
+        req.flash('error', 'Cập nhật sản phẩm thất bại!');
+    }
     res.redirect('back');
 };

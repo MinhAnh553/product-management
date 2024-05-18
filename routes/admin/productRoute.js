@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const Router = express.Router();
 const multer = require('multer');
 
 const productController = require('../../controllers/admin/productController');
@@ -7,19 +7,29 @@ const productValidation = require('../../validations/admin/productValidation');
 const multerStorage = require('../../helpers/multerStorage');
 const upload = multer({ storage: multerStorage() });
 
-router.get('/', productController.index);
+Router.route('/').get(productController.index);
 
-router.patch('/change-status/:status/:id', productController.changeStatus);
-router.patch('/change-multi', productController.changeMulti);
-
-router.delete('/delete/:id', productController.deleteItem);
-
-router.get('/create', productController.pageCreate);
-router.post(
-    '/create',
-    upload.single('thumbnail'),
-    productValidation.createNew,
-    productController.createProduct
+Router.route('/change-status/:status/:id').patch(
+    productController.changeStatus
 );
+Router.route('/change-multi').patch(productController.changeMulti);
 
-module.exports = router;
+Router.route('/delete/:id').delete(productController.deleteItem);
+
+Router.route('/create')
+    .get(productController.pageCreate)
+    .post(
+        upload.single('thumbnail'),
+        productValidation.createNew,
+        productController.createProduct
+    );
+
+Router.route('/edit/:id')
+    .get(productController.pageEdit)
+    .patch(
+        upload.single('thumbnail'),
+        productValidation.createNew,
+        productController.updateProduct
+    );
+
+module.exports = Router;
