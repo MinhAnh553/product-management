@@ -32,4 +32,6 @@ Router.route('/edit/:id')
         productController.updateProduct
     );
 
+Router.route('/detail/:id').get(productController.detailProduct);
+
 module.exports = Router;

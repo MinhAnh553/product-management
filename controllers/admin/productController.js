@@ -231,3 +231,17 @@ module.exports.updateProduct = async (req, res) => {
     }
     res.redirect('back');
 };
+
+// [GET] /admin/products/detail/:id
+module.exports.detailProduct = async (req, res) => {
+    const id = req.params.id;
+    const find = {
+        _id: id,
+        deleted: false,
+    };
+
+    const product = await productModel.findOne(find);
+    res.render('./admin/pages/product/detail.pug', {
+        product: product,
+    });
+};
