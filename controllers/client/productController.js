@@ -22,3 +22,19 @@ module.exports.index = async (req, res) => {
         products: newProducts,
     });
 };
+
+// [GET] /products/:slug
+module.exports.detailProduct = async (req, res) => {
+    const slug = req.params.slug;
+    const find = {
+        slug: slug,
+        deleted: false,
+        status: 'active',
+    };
+    const product = await productModel.findOne(find);
+    console.log('MinhAnh553: module.exports.detailProduct -> product', product);
+
+    res.render('./client/pages/products/detail.pug', {
+        product: product,
+    });
+};
