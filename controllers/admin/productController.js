@@ -170,9 +170,6 @@ module.exports.createProduct = async (req, res) => {
     data.price = parseInt(data.price);
     data.discountPercentage = parseInt(data.discountPercentage);
     data.stock = parseInt(data.stock);
-    if (req.file) {
-        data.thumbnail = `/uploads/${req.file.filename}`;
-    }
     if (data.position == '') {
         const countProduct = await productModel.countDocuments();
         data.position = parseInt(countProduct + 1);
@@ -212,9 +209,6 @@ module.exports.updateProduct = async (req, res) => {
         data.price = parseInt(data.price);
         data.discountPercentage = parseInt(data.discountPercentage);
         data.stock = parseInt(data.stock);
-        if (req.file) {
-            data.thumbnail = `/uploads/${req.file.filename}`;
-        }
 
         data.position = parseInt(data.position);
 

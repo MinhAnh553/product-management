@@ -4,8 +4,8 @@ const multer = require('multer');
 
 const productController = require('../../controllers/admin/productController');
 const productValidation = require('../../validations/admin/productValidation');
-const multerStorage = require('../../helpers/multerStorage');
-const upload = multer({ storage: multerStorage() });
+const uploadCloudMiddleware = require('../../middlewares/uploadCloudMiddleware');
+const fileUpload = multer();
 
 Router.route('/').get(productController.index);
 
@@ -19,7 +19,8 @@ Router.route('/delete/:id').delete(productController.deleteItem);
 Router.route('/create')
     .get(productController.pageCreate)
     .post(
-        upload.single('thumbnail'),
+        fileUpload.single('thumbnail'),
+        uploadCloudMiddleware.uploadCloud,
         productValidation.createNew,
         productController.createProduct
     );
@@ -27,7 +28,8 @@ Router.route('/create')
 Router.route('/edit/:id')
     .get(productController.pageEdit)
     .patch(
-        upload.single('thumbnail'),
+        fileUpload.single('thumbnail'),
+        uploadCloudMiddleware.uploadCloud,
         productValidation.createNew,
         productController.updateProduct
     );
