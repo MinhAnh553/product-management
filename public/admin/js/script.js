@@ -157,3 +157,31 @@ if (uploadImage) {
         }
     });
 }
+
+// Filter Products
+const sortBox = document.querySelector('[sort]');
+if (sortBox) {
+    const url = new URL(window.location.href);
+    const sortSelect = sortBox.querySelector('[sort-select]');
+    const clearSort = sortBox.querySelector('[sort-clear]');
+
+    sortSelect.addEventListener('change', (e) => {
+        url.searchParams.set('sortby', e.target.value);
+
+        window.location.href = url.href;
+    });
+
+    clearSort.addEventListener('click', () => {
+        url.searchParams.delete('sortby');
+
+        window.location.href = url.href;
+    });
+
+    const sortBy = url.searchParams.get('sortby');
+    if (sortBy) {
+        const optionSelected = sortSelect.querySelector(
+            `option[value=${sortBy}]`
+        );
+        optionSelected.selected = true;
+    }
+}
