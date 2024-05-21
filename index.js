@@ -30,11 +30,11 @@ app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 
 // Config view
-app.set('views', './views');
+app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 // Config static file
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // Biến
 app.locals.prefixAdmin = system.prefixAdmin;
