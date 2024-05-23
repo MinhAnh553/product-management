@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
@@ -38,6 +39,12 @@ app.use(express.static(__dirname + '/public'));
 
 // Biến
 app.locals.prefixAdmin = system.prefixAdmin;
+
+/* New Route to the TinyMCE Node module */
+app.use(
+    '/tinymce',
+    express.static(path.join(__dirname, 'node_modules', 'tinymce'))
+);
 
 // Route
 routeAdmin(app);
