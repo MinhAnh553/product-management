@@ -1,4 +1,5 @@
 const productCategoryModel = require('../../models/productCategoryModel');
+const createTreeHelper = require('../../helpers/createTree');
 const system = require('../../config/system.js');
 
 // [GET] /admin/products-category
@@ -9,10 +10,11 @@ module.exports.index = async (req, res) => {
         };
 
         const productCategory = await productCategoryModel.find(find);
+        const newRecords = createTreeHelper(productCategory);
 
         res.render('admin/pages/products-category/index', {
             pageTitle: 'Danh mục sản phẩm',
-            productCategory: productCategory,
+            productCategory: newRecords,
         });
     } catch (error) {
         res.redirect(`${system.prefixAdmin}/products-category`);
@@ -22,8 +24,17 @@ module.exports.index = async (req, res) => {
 // [GET] /admin/products-category/create
 module.exports.pageCreate = async (req, res) => {
     try {
+        const find = {
+            deleted: false,
+        };
+
+        const records = await productCategoryModel.find(find);
+
+        const newRecords = createTreeHelper(records);
+
         res.render('admin/pages/products-category/create', {
             pageTitle: 'Tạo danh mục',
+            records: newRecords,
         });
     } catch (error) {
         res.redirect(`${system.prefixAdmin}/products-category`);

@@ -34,5 +34,7 @@ module.exports.uploadCloud = async (req, res, next) => {
         }
 
         upload(req);
+    } else {
+        next();
     }
 };
