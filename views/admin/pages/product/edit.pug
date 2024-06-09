@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
     +alert-success(3000)
@@ -23,6 +24,16 @@ block main
                 value=product.title
                 required
             )
+        div(class="form-group")
+            label(for="category") Danh mục  
+            select(
+                name="category"
+                id="category"
+                class="form-control"
+            ) 
+                option(value="") -- Chọn danh mục --
+                if(records)
+                    +select-tree(records, level = 1, product.category)
         div(class="form-group")
             label(for="desc") Mô tả
             textarea(
@@ -115,7 +126,7 @@ block main
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Tạo mới
+            ) Cập nhật
 
     script(src="/tinymce/tinymce.min.js")
     script(src="/admin/js/tinymce-config.js") 

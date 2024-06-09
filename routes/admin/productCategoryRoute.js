@@ -16,4 +16,12 @@ Router.route('/create')
         productCategoryController.create
     );
 
+Router.route('/edit/:id')
+    .get(productCategoryController.pageEdit)
+    .patch(
+        fileUpload.single('thumbnail'),
+        uploadCloudMiddleware.uploadCloud,
+        productCategoryController.edit
+    );
+
 module.exports = Router;
