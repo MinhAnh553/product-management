@@ -24,10 +24,49 @@ module.exports.pageCreate = async (req, res) => {
 
 // [POST] /admin/roles/create
 module.exports.create = async (req, res) => {
-    const data = req.body;
-    const role = new roleModel(req.body);
-    await role.save();
+    try {
+        const data = req.body;
+        const role = new roleModel(req.body);
+        await role.save();
 
-    req.flash('success', 'Tạo nhóm quyền thành công!');
-    res.redirect(`${system.prefixAdmin}/roles`);
+        req.flash('success', 'Tạo nhóm quyền thành công!');
+        res.redirect(`${system.prefixAdmin}/roles`);
+    } catch (error) {
+        res.redirect(`${system.prefixAdmin}/roles`);
+    }
+};
+
+// [GET] /admin/roles/edit:id
+module.exports.pageEdit = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const role = await roleModel.findOne({
+            _id: id,
+        });
+        res.render('admin/pages/role/edit', {
+            pageTitle: 'Trang chỉnh sửa',
+            data: role,
+        });
+    } catch (error) {
+        res.redirect(`${system.prefixAdmin}/roles`);
+    }
+};
+
+// [PATCH] /admin/roles/edit:id
+module.exports.edit = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = req.body;
+
+        await roleModel.updateOne(
+            {
+                _id: id,
+            },
+            data
+        );
+        req.flash('success', 'Cập nhật thành công!');
+    } catch (error) {
+        req.flash('error', 'Cập nhật thất bại!');
+    }
+    res.redirect('back');
 };
