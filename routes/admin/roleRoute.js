@@ -11,4 +11,8 @@ Router.route('/edit/:id')
     .get(roleController.pageEdit)
     .patch(roleController.edit);
 
+Router.route('/permissions')
+    .get(roleController.pagePermissions)
+    .patch(roleController.permissionsChange);
+
 module.exports = Router;

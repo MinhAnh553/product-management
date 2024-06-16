@@ -70,3 +70,37 @@ module.exports.edit = async (req, res) => {
     }
     res.redirect('back');
 };
+
+// [GET] /admin/roles/permissions
+module.exports.pagePermissions = async (req, res) => {
+    const records = await roleModel.find({
+        deleted: false,
+    });
+
+    res.render('admin/pages/role/permissions', {
+        pageTitle: 'Trang phân quyền',
+        records: records,
+    });
+};
+
+// [PATCH] /admin/roles/edit:id
+module.exports.permissionsChange = async (req, res) => {
+    try {
+        const data = JSON.parse(req.body.permissions);
+
+        for (const item of data) {
+            await roleModel.updateOne(
+                {
+                    _id: item.id,
+                },
+                {
+                    permissions: item.permissions,
+                }
+            );
+        }
+        req.flash('success', 'Cập nhật thành công!');
+    } catch (error) {
+        req.flash('error', 'Cập nhật thất bại!');
+    }
+    res.redirect('back');
+};
