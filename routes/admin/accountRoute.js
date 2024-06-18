@@ -15,4 +15,12 @@ Router.route('/create')
         accountController.createAccount
     );
 
+Router.route('/edit/:id')
+    .get(accountController.editPage)
+    .patch(
+        fileUpload.single('avatar'),
+        uploadCloudMiddleware.uploadCloud,
+        accountController.editAccount
+    );
+
 module.exports = Router;
