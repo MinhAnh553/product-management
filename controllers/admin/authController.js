@@ -4,9 +4,24 @@ const system = require('../../config/system');
 
 // [GET] /admin/auth/login
 module.exports.pageLogin = (req, res) => {
-    res.render('admin/pages/auth/login', {
-        pageTitle: 'Trang đăng nhập',
-    });
+    const token = req.cookies.token;
+    if (token) {
+        const user = accountModel.findOne({
+            token: token,
+            deleted: false,
+        });
+        if (user) {
+            res.redirect(`${system.prefixAdmin}/dashboard`);
+        } else {
+            res.render('admin/pages/auth/login', {
+                pageTitle: 'Trang đăng nhập',
+            });
+        }
+    } else {
+        res.render('admin/pages/auth/login', {
+            pageTitle: 'Trang đăng nhập',
+        });
+    }
 };
 
 // [POST] /admin/auth/login

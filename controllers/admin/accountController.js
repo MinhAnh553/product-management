@@ -82,7 +82,6 @@ module.exports.editPage = async (req, res) => {
 module.exports.editAccount = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
-    console.log('MinhAnh553: module.exports.editAccount -> data', data);
     const emailExit = await accountModel.findOne({
         _id: { $ne: id },
         email: data.email,
