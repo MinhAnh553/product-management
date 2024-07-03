@@ -1,5 +1,7 @@
 const productModel = require('../../models/productModel.js');
 const productCategoryModel = require('../../models/productCategoryModel.js');
+const accountModel = require('../../models/accountModel');
+
 const filterStatusHelper = require('../../helpers/filterStatus.js');
 const searchHelper = require('../../helpers/search.js');
 const paginationHelper = require('../../helpers/pagination.js');
@@ -48,6 +50,16 @@ module.exports.index = async (req, res) => {
         .sort(sort)
         .limit(objectPagination.limitProduct)
         .skip(objectPagination.skip);
+
+    for (const product of products) {
+        const user = await accountModel.findOne({
+            _id: product.createBy.account_id,
+        });
+
+        if (user) {
+            product.accountFullName = user.fullName;
+        }
+    }
 
     res.render('admin/pages/product/index.pug', {
         pageTitle: 'Trang sản phẩm',
@@ -195,6 +207,11 @@ module.exports.createProduct = async (req, res) => {
     } else {
         data.position = parseInt(data.position);
     }
+
+    // Create By
+    data.createBy = {
+        account_id: res.locals.user.id,
+    };
 
     const product = new productModel(data);
     await product.save();

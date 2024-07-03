@@ -51,6 +51,10 @@ module.exports.create = async (req, res) => {
         } else {
             data.position = parseInt(data.position);
         }
+        // Create By
+        data.createBy = {
+            account_id: res.locals.user.id,
+        };
 
         // console.log(data);
         const product = new productCategoryModel(data);

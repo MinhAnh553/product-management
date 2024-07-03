@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
 include ../../mixins/filter.pug
+include ../../mixins/moment.pug
 
 block main
     +alert-success(3000)
@@ -56,6 +57,7 @@ block main
                                 th Giá
                                 th Vị trí
                                 th Trạng thái 
+                                th Người tạo
                                 th Hành động
 
                         tbody
@@ -111,6 +113,9 @@ block main
                                                 a(
                                                     href="javascript:" class="badge bg-danger"
                                                 ) Dừng hoạt động
+                                    td 
+                                        p #{item.accountFullName}
+                                        +formatDateTime(item.createBy.createAt)
                                     td
                                         a(
                                             href=`${prefixAdmin}/products/detail/${item.id}`

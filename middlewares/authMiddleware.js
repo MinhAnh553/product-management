@@ -16,6 +16,7 @@ module.exports.requireAuth = async (req, res, next) => {
                 _id: user.role_id,
             });
 
+            res.locals.user = user;
             res.locals.role = role;
             next();
         } else {

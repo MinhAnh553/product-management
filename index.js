@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const moment = require('moment');
 
 const datbase = require('./config/database');
 const routeAdmin = require('./routes/admin/indexRoute');
@@ -39,6 +40,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Biến
 app.locals.prefixAdmin = system.prefixAdmin;
+app.locals.moment = moment;
 
 /* New Route to the TinyMCE Node module */
 app.use(
