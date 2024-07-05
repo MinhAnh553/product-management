@@ -58,6 +58,7 @@ block main
                                 th Vị trí
                                 th Trạng thái 
                                 th Người tạo
+                                th Người cập nhật
                                 th Hành động
 
                         tbody
@@ -116,6 +117,10 @@ block main
                                     td 
                                         p #{item.accountFullName}
                                         +formatDateTime(item.createBy.createAt)
+                                    td 
+                                        if(item.infoUserLastUpdate)
+                                            p #{item.infoUserLastUpdate.fullName}
+                                            +formatDateTime(item.infoUserLastUpdate.updateAt)
                                     td
                                         a(
                                             href=`${prefixAdmin}/products/detail/${item.id}`
