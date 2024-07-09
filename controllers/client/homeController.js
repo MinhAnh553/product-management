@@ -3,7 +3,7 @@ const productHelper = require('../../helpers/product');
 
 // [GET] /
 module.exports.index = async (req, res) => {
-    const productFeatured = await productModel
+    const productsFeatured = await productModel
         .find({
             featured: '1',
             deleted: false,
@@ -11,10 +11,21 @@ module.exports.index = async (req, res) => {
         })
         .limit(6);
 
-    const newProducts = productHelper.priceNew(productFeatured);
+    const featuredProducts = productHelper.priceNew(productsFeatured);
+
+    const newProducts = await productModel
+        .find({
+            deleted: false,
+            status: 'active',
+        })
+        .sort({ position: 'desc' })
+        .limit(6);
+
+    const newProducts2 = productHelper.priceNew(newProducts);
 
     res.render('client/pages/home/index', {
         pageTitle: 'Trang chủ',
-        productFeatured: newProducts,
+        productFeatured: featuredProducts,
+        newProducts: newProducts2,
     });
 };
