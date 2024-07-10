@@ -22,45 +22,63 @@ module.exports.index = async (req, res) => {
 
 // [GET] /products/:slugCategory
 module.exports.categoryPage = async (req, res) => {
-    const slug = req.params.slugCategory;
+    try {
+        const slug = req.params.slugCategory;
 
-    const category = await productCategoryModel.findOne({
-        slug: slug,
-        deleted: false,
-        status: 'active',
-    });
-
-    // get all children in category
-    const allCategory = await productCategoryHelper.getChildren(category.id);
-
-    const listCategoryId = allCategory.map((item) => item.id);
-
-    const products = await productModel
-        .find({
-            category: { $in: [category.id, ...listCategoryId] },
-            status: 'active',
+        const category = await productCategoryModel.findOne({
+            slug: slug,
             deleted: false,
-        })
-        .sort({ position: 'desc' });
+            status: 'active',
+        });
 
-    const newProducts = productHelper.priceNew(products);
+        // get all children in category
+        const allCategory = await productCategoryHelper.getChildren(
+            category.id
+        );
 
-    res.render('client/pages/products/index', {
-        pageTitle: category.title,
-        products: newProducts,
-    });
+        const listCategoryId = allCategory.map((item) => item.id);
+
+        const products = await productModel
+            .find({
+                category: { $in: [category.id, ...listCategoryId] },
+                status: 'active',
+                deleted: false,
+            })
+            .sort({ position: 'desc' });
+
+        const newProducts = productHelper.priceNew(products);
+
+        res.render('client/pages/products/index', {
+            pageTitle: category.title,
+            products: newProducts,
+        });
+    } catch (error) {
+        res.redirect('/products');
+    }
 };
 
-// [GET] /products/:slug
+// [GET] /products/:slugProduct
 module.exports.detailProduct = async (req, res) => {
     try {
-        const slug = req.params.slug;
+        const slug = req.params.slugProduct;
         const find = {
             slug: slug,
             deleted: false,
             status: 'active',
         };
         const product = await productModel.findOne(find);
+
+        if (product.category) {
+            const category = await productCategoryModel.findOne({
+                _id: product.category,
+                deleted: false,
+                status: 'active',
+            });
+
+            product.category_info = category;
+        }
+
+        product.priceNew = productHelper.priceNewOne(product);
 
         res.render('./client/pages/products/detail.pug', {
             pageTitle: product.title,
