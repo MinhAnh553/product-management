@@ -5,14 +5,9 @@ include ../../mixins/box-head.pug
 
 block main  
     .section-products-featured.my-5
-        .container
-            .row
-                .col-12
-                    +box-head("Sản phẩm nổi bật")
-            +product-grid(productFeatured)
         
         .container
             .row
                 .col-12
-                    +box-head("Sản phẩm mới")
-            +product-grid(newProducts)
+                    +box-head(pageTitle)
+            +product-grid(products)
