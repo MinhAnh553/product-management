@@ -1,6 +1,7 @@
 const search = require('../../helpers/search');
 const productModel = require('../../models/productModel');
 
+// [GET] /search
 module.exports.search = async (req, res) => {
     const result = search(req);
 
