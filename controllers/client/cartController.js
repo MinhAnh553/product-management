@@ -96,3 +96,24 @@ module.exports.deleteProduct = async (req, res) => {
 
     res.redirect('back');
 };
+
+// [GET] /cart/update/:idProduct/:quantity
+module.exports.updateQuantity = async (req, res) => {
+    const cartId = req.cookies.cartId;
+    const productId = req.params.idProduct;
+    const quantity = req.params.quantity;
+
+    await cartModel.updateOne(
+        {
+            _id: cartId,
+            'products.product_id': productId,
+        },
+        {
+            'products.$.quantity': quantity,
+        }
+    );
+
+    req.flash('success', 'Cập nhật số lượng thành công!');
+
+    res.redirect('back');
+};

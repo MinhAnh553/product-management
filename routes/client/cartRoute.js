@@ -9,4 +9,6 @@ Router.route('/delete/:idProduct').get(cartController.deleteProduct);
 
 Router.route('/add/:idProduct').post(cartController.addProduct);
 
+Router.route('/update/:idProduct/:quantity').get(cartController.updateQuantity);
+
 module.exports = Router;

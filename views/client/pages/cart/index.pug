@@ -39,6 +39,7 @@ block main
                                         name="quantity"
                                         value=product.quantity
                                         min="1"
+                                        max=product.productInfo.stock
                                         item-id=product.product_id
                                         style="width: 60px"
                                     )
@@ -53,3 +54,5 @@ block main
 
                 div(class="text-end mt-3")
                     a(href="/checkout" class="btn btn-success") THANH TOÁN
+
+    script(src="/js/cart.js") 
