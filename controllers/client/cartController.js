@@ -8,7 +8,7 @@ module.exports.cartPage = async (req, res) => {
         _id: req.cookies.cartId,
     });
 
-    if (cart.products.length > 0) {
+    if (cart && cart.products.length > 0) {
         for (const product of cart.products) {
             const productInfo = await productModel.findOne({
                 _id: product.product_id,
@@ -21,9 +21,11 @@ module.exports.cartPage = async (req, res) => {
             product.total = productInfo.priceNew * product.quantity;
             product.productInfo = productInfo;
         }
+        cart.totalPrice = cart.products.reduce(
+            (sum, item) => sum + item.total,
+            0
+        );
     }
-
-    cart.totalPrice = cart.products.reduce((sum, item) => sum + item.total, 0);
 
     res.render('client/pages/cart/index', {
         pageTitle: 'Giỏ hàng',

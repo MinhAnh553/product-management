@@ -15,44 +15,52 @@ block main
             .col-12
                 table(class="table table-bordered")
                     thead
-                        tr
-                            th STT 
-                            th Ảnh 
-                            th Tên
-                            th Giá
-                            th Số lượng
-                            th Tổng tiền
-                            th Hành động
-                    tbody
-                        each product, index in cart.products
+                        if(cart && cart.products.length > 0)
                             tr
-                                td #{index + 1}
-                                td 
-                                    img(src=product.productInfo.thumbnail, alt=product.productInfo.title
-                                    width="80px")
-                                td
-                                    a(href=`/products/detail/${product.productInfo.slug}`) #{product.productInfo.title}
-                                td #{product.productInfo.priceNew}$
-                                td 
-                                    input(
-                                        type="number"
-                                        name="quantity"
-                                        value=product.quantity
-                                        min="1"
-                                        max=product.productInfo.stock
-                                        item-id=product.product_id
-                                        style="width: 60px"
-                                    )
-                                td #{product.total}$
-                                td  
-                                    a(
-                                        href=`/cart/delete/${product.product_id}`
-                                        class="btn btn-danger"
-                                    ) Xóa
+                                th STT 
+                                th Ảnh 
+                                th Tên
+                                th Giá
+                                th Số lượng
+                                th Tổng tiền
+                                th Hành động
+                    tbody
+                        if(cart && cart.products.length > 0)
+                            each product, index in cart.products
+                                tr
+                                    td #{index + 1}
+                                    td 
+                                        img(src=product.productInfo.thumbnail, alt=product.productInfo.title
+                                        width="80px")
+                                    td
+                                        a(href=`/products/detail/${product.productInfo.slug}`) #{product.productInfo.title}
+                                    td #{product.productInfo.priceNew}$
+                                    td 
+                                        input(
+                                            type="number"
+                                            name="quantity"
+                                            value=product.quantity
+                                            min="1"
+                                            max=product.productInfo.stock
+                                            item-id=product.product_id
+                                            style="width: 60px"
+                                        )
+                                    td #{product.total}$
+                                    td  
+                                        a(
+                                            href=`/cart/delete/${product.product_id}`
+                                            class="btn btn-danger"
+                                        ) Xóa
+                        else 
+                            tr
+                                td(
+                                    colspan="7"
+                                    class="text-center"
+                                ) Giỏ hàng trống
+                if(cart && cart.products.length > 0)
+                    h3(class="text-end") Tổng đơn hàng: #{cart.totalPrice}$
 
-                h3(class="text-end") Tổng đơn hàng: #{cart.totalPrice}$
-
-                div(class="text-end mt-3")
-                    a(href="/checkout" class="btn btn-success") THANH TOÁN
+                    div(class="text-end mt-3")
+                        a(href="/checkout" class="btn btn-success") THANH TOÁN
 
     script(src="/js/cart.js") 
