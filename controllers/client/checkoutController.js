@@ -69,7 +69,7 @@ module.exports.order = async (req, res) => {
     const objectOrder = {
         cart_id: cart_id,
         userInfo: userInfo,
-        produts: products,
+        products: products,
     };
 
     const order = new orderModel(objectOrder);
@@ -85,4 +85,44 @@ module.exports.order = async (req, res) => {
     );
 
     res.redirect(`/checkout/success/${order.id}`);
+};
+
+// [GET] /checkout/success/:orderId
+module.exports.success = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const order = await orderModel.findOne({
+            _id: orderId,
+        });
+
+        if (order) {
+            for (const product of order.products) {
+                const productInfo = await productModel.findOne({
+                    _id: product.product_id,
+                    status: 'active',
+                    deleted: false,
+                });
+
+                productInfo.priceNew = productHelper.priceNewOne(productInfo);
+
+                product.total = productInfo.priceNew * product.quantity;
+                product.productInfo = productInfo;
+            }
+        } else {
+            res.redirect('/products');
+            return;
+        }
+
+        order.totalPrice = order.products.reduce(
+            (sum, item) => sum + item.total,
+            0
+        );
+
+        res.render('client/pages/checkout/success', {
+            pageTitle: 'Đặt hàng thành công',
+            order: order,
+        });
+    } catch (error) {
+        res.redirect('/products');
+    }
 };

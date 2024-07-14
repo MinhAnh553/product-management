@@ -7,4 +7,6 @@ Router.route('/').get(checkoutController.index);
 
 Router.route('/order').post(checkoutController.order);
 
+Router.route('/success/:orderId').get(checkoutController.success);
+
 module.exports = Router;
