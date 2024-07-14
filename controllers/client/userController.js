@@ -30,3 +30,37 @@ module.exports.registerUser = async (req, res) => {
         res.redirect('/');
     }
 };
+
+// [GET] /user/login
+module.exports.loginPage = (req, res) => {
+    res.render('client/pages/user/login.pug', {
+        pageTitle: 'Đăng nhập',
+    });
+};
+
+// [POST] /user/login
+module.exports.loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({
+        email: email,
+    });
+    if (!user) {
+        req.flash('error', 'Email không tồn tại!');
+        res.redirect('back');
+    } else if (user.password == md5(password)) {
+        res.cookie('tokenUser', user.tokenUser);
+
+        req.flash('success', 'Đăng nhập thành công!');
+        res.redirect('/');
+    } else {
+        req.flash('error', 'Mật khẩu không đúng!');
+        res.redirect('back');
+    }
+};
+
+// [GET] /user/logout
+module.exports.logoutUser = (req, res) => {
+    res.clearCookie('tokenUser');
+    res.redirect('/user/login');
+};
