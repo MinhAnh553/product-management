@@ -2,8 +2,12 @@ extends ../../layouts/default.pug
 include ../../mixins/product-layouts.pug
 include ../../mixins/product-item.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 
 block main  
+    +alert-error(2000)
+    +alert-success(2000)
+
     .section-products-featured.my-5
         .container
             .row
