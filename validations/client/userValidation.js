@@ -38,3 +38,31 @@ module.exports.login = (req, res, next) => {
     }
     next();
 };
+
+module.exports.resetPassword = (req, res, next) => {
+    if (!req.body.password || req.body.password == '') {
+        req.flash('error', 'Vui lòng nhập mật khẩu!');
+
+        res.redirect('back');
+        return;
+    }
+
+    if (!req.body.confirmpassword || req.body.confirmpassword == '') {
+        req.flash('error', 'Vui lòng xác nhận lại mật khẩu!');
+
+        res.redirect('back');
+        return;
+    }
+
+    if (req.body.password != req.body.confirmpassword) {
+        req.flash(
+            'error',
+            'Nhập lại mật khẩu chưa trùng khớp vui lòng kiểm tra lại!'
+        );
+
+        res.redirect('back');
+        return;
+    }
+
+    next();
+};

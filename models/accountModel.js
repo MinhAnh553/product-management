@@ -8,7 +8,7 @@ const accountSchema = new mongoose.Schema(
         password: String,
         token: {
             type: String,
-            default: generateHelper(32),
+            default: generateHelper.string(32),
         },
         phone: String,
         avatar: String,

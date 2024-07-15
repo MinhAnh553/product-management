@@ -14,4 +14,16 @@ Router.route('/login')
 
 Router.route('/logout').get(userController.logoutUser);
 
+Router.route('/password/forgot')
+    .get(userController.forgotPasswordPage)
+    .post(userController.forgotPassword);
+
+Router.route('/password/otp')
+    .get(userController.otpPasswordPage)
+    .post(userController.otpPassword);
+
+Router.route('/password/reset')
+    .get(userController.resetPasswordPage)
+    .post(userValidation.resetPassword, userController.resetPassword);
+
 module.exports = Router;
