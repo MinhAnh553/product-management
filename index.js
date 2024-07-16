@@ -52,6 +52,10 @@ app.use(
 routeAdmin(app);
 route(app);
 
+app.get('*', (req, res) => {
+    res.render('client/pages/error/404.pug');
+});
+
 app.listen(port, () => {
     console.log(`Project back-end running at http://localhost:${port}...`);
 });

@@ -3,6 +3,7 @@ const forgotPasswordModel = require('../../models/forgotPasswordModel');
 const md5 = require('md5');
 const generateHelper = require('../../helpers/generate');
 const sendMail = require('../../helpers/sendMail');
+const cartModel = require('../../models/cartModel');
 
 // [GET] /user/register
 module.exports.registerPage = (req, res) => {
@@ -47,12 +48,23 @@ module.exports.loginUser = async (req, res) => {
 
     const user = await userModel.findOne({
         email: email,
+        status: 'active',
+        deleted: false,
     });
     if (!user) {
         req.flash('error', 'Email không tồn tại!');
         res.redirect('back');
     } else if (user.password == md5(password)) {
         res.cookie('tokenUser', user.tokenUser);
+
+        await cartModel.updateOne(
+            {
+                _id: req.cookies.cartId,
+            },
+            {
+                user_id: user.id,
+            }
+        );
 
         req.flash('success', 'Đăng nhập thành công!');
         res.redirect('/');
@@ -186,4 +198,11 @@ module.exports.resetPassword = async (req, res) => {
 
     req.flash('success', 'Đổi mật khẩu thành công!');
     res.redirect('/');
+};
+
+// [GET] /user/user-info
+module.exports.userInfo = async (req, res) => {
+    res.render('client/pages/user/user-info.pug', {
+        pageTitle: 'Thông tin tài khoản',
+    });
 };

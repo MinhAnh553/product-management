@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../../controllers/client/userController');
 const userValidation = require('../../validations/client/userValidation');
+const authMiddleware = require('../../middlewares/client/authMiddleware');
 
 const Router = express.Router();
 
@@ -25,5 +26,7 @@ Router.route('/password/otp')
 Router.route('/password/reset')
     .get(userController.resetPasswordPage)
     .post(userValidation.resetPassword, userController.resetPassword);
+
+Router.route('/user-info').get(authMiddleware, userController.userInfo);
 
 module.exports = Router;
