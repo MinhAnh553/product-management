@@ -1,0 +1,49 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main  
+    +alert-error(2000)
+    +alert-success(2000)
+
+    .container.my-3
+        .row
+            .col-12
+                +box-head(pageTitle)
+
+        .row
+            .col-12
+                .chat
+                    .inner-body
+                        .inner-incoming
+                            .inner-name Em Yêu 
+                            .inner-content
+                                | Anh ơi 
+                        .inner-outgoing
+                            .inner-content
+                                | Anh đây
+                        .inner-incoming
+                            .inner-name Em Yêu 
+                            .inner-content
+                                | Anh không thương em gì hết trơn 
+                        .inner-outgoing
+                            .inner-content
+                                | Anh thương em mà
+                        .inner-incoming
+                            .inner-name Em Yêu 
+                            .inner-content
+                                | Anh nói dốc
+                    .inner-foot
+                        form(
+                            class="inner-form"
+                            action=""
+                        )
+                            input(
+                                type="text"
+                                placeholder="Nhập nội dung..."
+                                name="content"
+                            )
+                            button
+                                i.fa-solid.fa-paper-plane
+    script(src="/socket.io/socket.io.js") 
+    script(src="/js/chat.js") 

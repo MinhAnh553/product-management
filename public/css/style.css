@@ -238,3 +238,70 @@
     border-radius: 50%;
     cursor: pointer;
 }
+
+.chat {
+    margin: auto;
+    font-family: Arial, sans-serif;
+    border: 0.5px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+.inner-body {
+    padding: 10px;
+}
+.inner-incoming,
+.inner-outgoing {
+    display: flex;
+    margin: 5px 0;
+}
+.inner-incoming {
+    flex-direction: row;
+    align-items: flex-start;
+}
+.inner-outgoing {
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    text-align: right;
+}
+.inner-name {
+    font-weight: bold;
+    margin-right: 5px;
+}
+.inner-content {
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+.inner-incoming .inner-content {
+    background-color: #f1f0f0;
+    margin-left: -44px;
+    margin-top: 30px;
+}
+.inner-outgoing .inner-content {
+    background-color: #ffe0f0;
+    margin-right: 5px;
+}
+.chat .inner-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chat .inner-form input {
+    flex: 1;
+    height: 32px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 0 10px;
+    outline: none;
+}
+
+.chat .inner-form button {
+    border-radius: 15px;
+    border: 1px solid #fe5da3;
+    background: #fe5da3;
+    color: #fff;
+    height: 32px;
+    padding: 0 10px;
+    cursor: pointer;
+}

@@ -6,6 +6,8 @@ const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const moment = require('moment');
+const { Server } = require('socket.io');
+const { createServer } = require('node:http');
 
 const datbase = require('./config/database');
 const routeAdmin = require('./routes/admin/indexRoute');
@@ -52,10 +54,15 @@ app.use(
 routeAdmin(app);
 route(app);
 
+// Socket
+const server = createServer(app);
+const io = new Server(server);
+global._io = io;
+
 app.get('*', (req, res) => {
     res.render('client/pages/error/404.pug');
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Project back-end running at http://localhost:${port}...`);
 });
