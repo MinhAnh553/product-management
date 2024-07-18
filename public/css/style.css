@@ -248,6 +248,8 @@
 }
 .inner-body {
     padding: 10px;
+    max-height: 450px;
+    overflow-y: auto;
 }
 .inner-incoming,
 .inner-outgoing {

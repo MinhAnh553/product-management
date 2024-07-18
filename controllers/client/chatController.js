@@ -3,13 +3,23 @@ const userModel = require('../../models/userModel');
 
 // [GET] /chat
 module.exports.index = async (req, res) => {
+    const userId = res.locals.user.id;
+    const fullName = res.locals.user.fullName;
+
     _io.once('connection', (socket) => {
         socket.on('CLIENT_SEND_MESSAGE', async (content) => {
             const chat = new chatModel({
-                user_id: res.locals.user.id,
+                user_id: userId,
                 content: content,
             });
             await chat.save();
+
+            // Return
+            _io.emit('SERVER_RETURN_MESSAGE', {
+                userId: userId,
+                fullName: fullName,
+                content: content,
+            });
         });
     });
 

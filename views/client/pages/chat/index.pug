@@ -14,7 +14,7 @@ block main
         .row
             .col-12
                 .chat
-                    .inner-body
+                    .inner-body(my-id=user.id)
                         each chat in chats
                             div(class=(chat.user_id == user.id ? "inner-outgoing" :  "inner-incoming"))
                                 if(chat.user_id != user.id)
