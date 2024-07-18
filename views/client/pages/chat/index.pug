@@ -15,24 +15,25 @@ block main
             .col-12
                 .chat
                     .inner-body
-                        .inner-incoming
-                            .inner-name Em Yêu 
-                            .inner-content
-                                | Anh ơi 
-                        .inner-outgoing
-                            .inner-content
-                                | Anh đây
-                        .inner-incoming
-                            .inner-name Em Yêu 
-                            .inner-content
-                                | Anh không thương em gì hết trơn 
-                        .inner-outgoing
-                            .inner-content
-                                | Anh thương em mà
-                        .inner-incoming
-                            .inner-name Em Yêu 
-                            .inner-content
-                                | Anh nói dốc
+                        each chat in chats
+                            div(class=(chat.user_id == user.id ? "inner-outgoing" :  "inner-incoming"))
+                                if(chat.user_id != user.id)
+                                    .inner-name #{chat.infoUser.fullName} 
+                                .inner-content #{chat.content} 
+                        //- .inner-outgoing
+                        //-     .inner-content
+                        //-         | Anh đây
+                        //- .inner-incoming
+                        //-     .inner-name Em Yêu 
+                        //-     .inner-content
+                        //-         | Anh không thương em gì hết trơn 
+                        //- .inner-outgoing
+                        //-     .inner-content
+                        //-         | Anh thương em mà
+                        //- .inner-incoming
+                        //-     .inner-name Em Yêu 
+                        //-     .inner-content
+                        //-         | Anh nói dốc
                     .inner-foot
                         form(
                             class="inner-form"
@@ -45,5 +46,7 @@ block main
                             )
                             button
                                 i.fa-solid.fa-paper-plane
-    script(src="/socket.io/socket.io.js") 
+
+    script(src="/socket.io/socket.io.js")
+    script(src="/js/socket.js")  
     script(src="/js/chat.js") 
