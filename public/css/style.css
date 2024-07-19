@@ -307,3 +307,12 @@
     padding: 0 10px;
     cursor: pointer;
 }
+
+.tooltip {
+    visibility: hidden;
+}
+
+.tooltip.shown {
+    visibility: visible;
+    opacity: 1;
+}
