@@ -1,5 +1,11 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
 
+// FileUploadWithPreview
+const upload = new FileUploadWithPreview.FileUploadWithPreview('my-upload', {
+    multiple: true,
+    maxFileCount: 6,
+});
+
 // Funtion
 var timeOutTyping;
 const showTyping = () => {
@@ -16,7 +22,8 @@ if (formMessage) {
     formMessage.addEventListener('submit', (e) => {
         e.preventDefault();
         const message = e.target.elements.content.value;
-        if (message != '') {
+        const images = upload.cachedFileArray || [];
+        if (message != '' || images.length > 0) {
             socket.emit('CLIENT_SEND_MESSAGE', message);
             e.target.elements.content.value = '';
             socket.emit('CLIENT_SEND_TYPING', 'hidden');

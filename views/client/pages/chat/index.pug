@@ -38,6 +38,7 @@ block main
                                 placeholder="Nhập nội dung..."
                                 name="content"
                             )
+                            div(class="custom-file-container" data-upload-id="my-upload")
                             span(class="button-icon btn mx-1") 
                                 i.fa-regular.fa-face-smile
                             button
@@ -49,4 +50,5 @@ block main
     script(src="/socket.io/socket.io.js")
     script(src="/js/socket.js")
     script(type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")  
+    script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js") 
     script(type="module" src="/js/chat.js") 
