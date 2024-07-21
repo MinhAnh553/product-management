@@ -1,4 +1,4 @@
-const authMiddleware = require('../../middlewares/authMiddleware');
+const authMiddleware = require('../../middlewares/admin/authMiddleware');
 
 const dashboardRoute = require('./dashboardRoute');
 const productRoute = require('./productRoute');

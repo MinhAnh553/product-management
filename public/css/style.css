@@ -246,43 +246,47 @@
     border-radius: 5px;
     padding: 10px;
 }
+
 .inner-body {
     padding: 10px;
     max-height: 450px;
     overflow-y: auto;
 }
+
 .inner-incoming,
 .inner-outgoing {
-    display: flex;
     margin: 5px 0;
 }
+
 .inner-incoming {
-    flex-direction: row;
-    align-items: flex-start;
+    text-align: left;
 }
+
 .inner-outgoing {
-    flex-direction: row-reverse;
-    align-items: flex-end;
     text-align: right;
 }
+
 .inner-name {
     font-weight: bold;
-    margin-right: 5px;
 }
+
 .inner-content {
+    display: inline-block;
     padding: 10px;
     border-radius: 10px;
     max-width: 70%;
+    word-wrap: break-word;
+    margin-bottom: 5px;
 }
+
 .inner-incoming .inner-content {
     background-color: #f1f0f0;
-    margin-left: -44px;
-    margin-top: 30px;
 }
+
 .inner-outgoing .inner-content {
     background-color: #ffe0f0;
-    margin-right: 5px;
 }
+
 .chat .inner-form {
     display: flex;
     align-items: center;
@@ -306,6 +310,41 @@
     height: 32px;
     padding: 0 10px;
     cursor: pointer;
+}
+
+.chat .inner-body .inner-images img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background-color: #efefef;
+    padding: 10px;
+    margin: 0 5px 5px 0;
+    border-radius: 5px;
+}
+
+.chat .inner-body .inner-outgoing .inner-images {
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat .inner-body .inner-outgoing .inner-images img {
+    margin: 0 0 5px 5px;
+}
+
+.chat .inner-preview-images .label-container,
+.chat .inner-preview-images .input-container {
+    display: none;
+}
+
+.chat .inner-preview-images .image-preview {
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+}
+
+.chat .inner-preview-images .image-preview-item {
+    width: 90px;
+    background-size: contain;
 }
 
 .tooltip {

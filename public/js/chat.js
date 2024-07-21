@@ -24,8 +24,12 @@ if (formMessage) {
         const message = e.target.elements.content.value;
         const images = upload.cachedFileArray || [];
         if (message != '' || images.length > 0) {
-            socket.emit('CLIENT_SEND_MESSAGE', message);
+            socket.emit('CLIENT_SEND_MESSAGE', {
+                content: message,
+                images: images,
+            });
             e.target.elements.content.value = '';
+            upload.resetPreviewPanel();
             socket.emit('CLIENT_SEND_TYPING', 'hidden');
         }
     });
@@ -38,20 +42,35 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     const listTyping = document.querySelector('.chat .inner-list-typing');
     const div = document.createElement('div');
 
-    let divFullName = '';
+    let htmlFullName = '';
     if (myId == data.userId) {
         div.classList.add('inner-outgoing');
     } else {
-        divFullName = `<div class="inner-name">${data.fullName}</div>`;
+        htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
         div.classList.add('inner-incoming');
     }
 
-    const html = `
-        ${divFullName}
-        <div class="inner-content">${data.content}</div>
-    `;
+    let htmlContent = '';
+    if (data.content) {
+        htmlContent = `
+            <div class="inner-content">${data.content}</div>
+        `;
+    }
 
-    div.innerHTML = html;
+    let htmlImage = '';
+    if (data.images) {
+        htmlImage = `<div class="inner-images">`;
+        for (const image of data.images) {
+            htmlImage += `<img src="${image}"/>`;
+        }
+        htmlImage += '</div>';
+    }
+
+    div.innerHTML = `
+        ${htmlFullName}
+        ${htmlContent}
+        ${htmlImage}
+    `;
     body.insertBefore(div, listTyping);
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });

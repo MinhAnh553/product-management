@@ -3,7 +3,7 @@ const Router = express.Router();
 const multer = require('multer');
 
 const accountController = require('../../controllers/admin/accountController');
-const uploadCloudMiddleware = require('../../middlewares/uploadCloudMiddleware');
+const uploadCloudMiddleware = require('../../middlewares/admin/uploadCloudMiddleware');
 const fileUpload = multer();
 
 Router.route('/').get(accountController.index);

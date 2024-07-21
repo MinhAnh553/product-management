@@ -1,6 +1,6 @@
-const accountModel = require('../models/accountModel');
-const roleModel = require('../models/roleModel');
-const system = require('../config/system');
+const accountModel = require('../../models/accountModel');
+const roleModel = require('../../models/roleModel');
+const system = require('../../config/system');
 
 module.exports.requireAuth = async (req, res, next) => {
     const token = req.cookies.token;
