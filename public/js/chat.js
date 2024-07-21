@@ -1,5 +1,15 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
 
+// Funtion
+var timeOutTyping;
+const showTyping = () => {
+    socket.emit('CLIENT_SEND_TYPING', 'show');
+    clearTimeout(timeOutTyping);
+    timeOutTyping = setTimeout(() => {
+        socket.emit('CLIENT_SEND_TYPING', 'hidden');
+    }, 2500);
+};
+
 // CLIENT_SEND_MESSAGE
 const formMessage = document.querySelector('.chat .inner-form');
 if (formMessage) {
@@ -9,6 +19,7 @@ if (formMessage) {
         if (message != '') {
             socket.emit('CLIENT_SEND_MESSAGE', message);
             e.target.elements.content.value = '';
+            socket.emit('CLIENT_SEND_TYPING', 'hidden');
         }
     });
 }
@@ -17,6 +28,7 @@ if (formMessage) {
 socket.on('SERVER_RETURN_MESSAGE', (data) => {
     const body = document.querySelector('.inner-body');
     const myId = body.getAttribute('my-id');
+    const listTyping = document.querySelector('.chat .inner-list-typing');
     const div = document.createElement('div');
 
     let divFullName = '';
@@ -33,8 +45,7 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     `;
 
     div.innerHTML = html;
-    body.appendChild(div);
-
+    body.insertBefore(div, listTyping);
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
@@ -54,14 +65,52 @@ if (buttonIcon && tooltip) {
     };
 }
 
-const emojiPicker = document.querySelector('emoji-picker');
-if (emojiPicker) {
+const inputContent = document.querySelector(
+    ".chat .inner-form input[name='content']"
+);
+if (inputContent) {
+    // chèn emoji-picker
+    const emojiPicker = document.querySelector('emoji-picker');
     emojiPicker.addEventListener('emoji-click', (e) => {
         const emoji = e.detail.unicode;
-        const inputContent = document.querySelector(
-            ".chat .inner-form input[name='content']"
-        );
 
         inputContent.value += emoji;
+        showTyping();
+
+        const positon = inputContent.value.length;
+        inputContent.focus();
+        inputContent.setSelectionRange(positon, positon);
+    });
+
+    // typing
+    inputContent.addEventListener('keyup', (e) => {
+        showTyping();
+    });
+
+    // SERVER_RETURN_TYPING
+    socket.on('SERVER_RETURN_TYPING', (data) => {
+        const listTyping = document.querySelector('.chat .inner-list-typing');
+        const userTyping = document.querySelector(
+            `[user-typing="${data.userId}"]`
+        );
+        if (!userTyping && data.type == 'show') {
+            const div = document.createElement('div');
+            const html = `
+            <div class="inner-name">${data.fullName}</div>
+            <div class="inner-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        `;
+
+            div.classList.add('box-typing');
+            div.setAttribute('user-typing', data.userId);
+            div.innerHTML = html;
+            listTyping.appendChild(div);
+            bodyChat.scrollTop = bodyChat.scrollHeight;
+        } else if (data.type == 'hidden') {
+            listTyping.removeChild(userTyping);
+        }
     });
 }
