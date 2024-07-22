@@ -73,12 +73,16 @@ socket.on('SERVER_RETURN_MESSAGE', (data) => {
     `;
     body.insertBefore(div, listTyping);
     div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // View an image
+    const viewer = new Viewer(div);
 });
 
 // Scroll chat to bottom
 const bodyChat = document.querySelector('.inner-body');
 if (bodyChat) {
     bodyChat.scrollTop = bodyChat.scrollHeight;
+    // View an image
+    const viewer = new Viewer(bodyChat);
 }
 
 // emoji-picker
