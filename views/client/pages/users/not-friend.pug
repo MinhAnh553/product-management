@@ -1,0 +1,35 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main  
+    +alert-error(2000)
+    +alert-success(2000)
+
+    .container.my-3
+
+        include ../../partials/list-action-users.pug
+
+        .row
+            .col-12
+                +box-head(pageTitle)
+
+
+        .row
+            each user in users
+                .col-6 
+                    div(class="box-user")
+                        div(class="inner-avatar")
+                            img(
+                                src=(user.avatar ? user.avatar : "/images/avatar.png")
+                                alt=user.fullName
+                            )
+                        div(class="inner-info")
+                            div(class="inner-name") #{user.fullName}
+                            div(class="inner-buttons")
+                                button(
+                                    class="btn btn-sm btn-primary mx-1"
+                                ) Kết bạn
+                                button(
+                                    class="btn btn-sm btn-secondary mx-1"
+                                ) Hủy
