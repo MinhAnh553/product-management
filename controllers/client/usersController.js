@@ -1,37 +1,12 @@
 const userModel = require('../../models/userModel');
+const usersSocket = require('../../sockets/client/usersSocket');
 
 module.exports.notFriend = async (req, res) => {
     const userId = res.locals.user.id;
-    // Socket
-    _io.once('connection', (socket) => {
-        socket.on('CLIENT_ADD_FRIEND', async (idFriend) => {
-            // Thêm id của A vào acceptFriends của B
-            await userModel.updateOne(
-                {
-                    _id: idFriend,
-                    acceptFriends: { $ne: userId },
-                    status: 'active',
-                    deleted: false,
-                },
-                {
-                    $push: { acceptFriends: userId },
-                }
-            );
 
-            // Thêm id của B vào requestFriends của A
-            await userModel.updateOne(
-                {
-                    _id: userId,
-                    requestFriends: { $ne: idFriend },
-                    status: 'active',
-                    deleted: false,
-                },
-                {
-                    $push: { requestFriends: idFriend },
-                }
-            );
-        });
-    });
+    // Socket
+    usersSocket(userId);
+    //End Socket
     const userA = await userModel.findOne({
         _id: userId,
         status: 'active',
@@ -52,6 +27,31 @@ module.exports.notFriend = async (req, res) => {
 
     res.render('client/pages/users/not-friend', {
         pageTitle: 'Danh sách người dùng',
+        users: users,
+    });
+};
+
+module.exports.request = async (req, res) => {
+    const userId = res.locals.user.id;
+
+    // Socket
+    usersSocket(userId);
+    //End Socket
+
+    const userA = await userModel.findOne({
+        _id: userId,
+        status: 'active',
+        deleted: false,
+    });
+
+    const users = await userModel.find({
+        _id: { $in: userA.requestFriends },
+        status: 'active',
+        deleted: false,
+    });
+
+    res.render('client/pages/users/request', {
+        pageTitle: 'Lời mời đã gửi',
         users: users,
     });
 };
