@@ -42,3 +42,18 @@ if (btnRefuseFriend) {
         });
     });
 }
+
+// Accepted friend
+const btnAcceptFriend = document.querySelectorAll('[btn-accept-friend]');
+if (btnAcceptFriend) {
+    btnAcceptFriend.forEach((button) => {
+        button.addEventListener('click', () => {
+            const idFriend = button.getAttribute('btn-accept-friend');
+
+            button.closest('.box-user').classList.add('accepted');
+
+            // Socket
+            socket.emit('CLIENT_ACCEPT_FRIEND', idFriend);
+        });
+    });
+}

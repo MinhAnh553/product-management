@@ -81,5 +81,45 @@ module.exports = async (userId) => {
                 }
             );
         });
+
+        socket.on('CLIENT_ACCEPT_FRIEND', async (idFriend) => {
+            // Thêm (user_id, room_chat_id) của A vào friendsList của B
+            // Xóa id của A trong acceptFriends của B
+            await userModel.updateOne(
+                {
+                    _id: userId,
+                    status: 'active',
+                    deleted: false,
+                },
+                {
+                    $push: {
+                        friendList: {
+                            user_id: idFriend,
+                            room_chat: 'none',
+                        },
+                    },
+                    $pull: { acceptFriends: idFriend },
+                }
+            );
+
+            // Thêm (user_id, room_chat_id) của B vào friendsList của A
+            // Xóa id của B trong requestFriends của A
+            await userModel.updateOne(
+                {
+                    _id: idFriend,
+                    status: 'active',
+                    deleted: false,
+                },
+                {
+                    $push: {
+                        friendList: {
+                            user_id: userId,
+                            room_chat: 'none',
+                        },
+                    },
+                    $pull: { requestFriends: userId },
+                }
+            );
+        });
     });
 };

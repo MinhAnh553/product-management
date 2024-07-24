@@ -14,12 +14,17 @@ module.exports.notFriend = async (req, res) => {
         deleted: false,
     });
 
+    let listFriend = [];
+    for (const friend of userA.friendList) {
+        listFriend.push(friend.user_id);
+    }
     const users = await userModel
         .find({
             $and: [
                 { _id: { $ne: userId } },
                 { _id: { $nin: userA.requestFriends } },
                 { _id: { $nin: userA.acceptFriends } },
+                { _id: { $nin: listFriend } },
             ],
             status: 'active',
             deleted: false,
