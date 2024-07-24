@@ -55,5 +55,31 @@ module.exports = async (userId) => {
                 }
             );
         });
+
+        socket.on('CLIENT_REFUSE_FRIEND', async (idFriend) => {
+            // Xóa id của A trong acceptFriends của B
+            await userModel.updateOne(
+                {
+                    _id: userId,
+                    status: 'active',
+                    deleted: false,
+                },
+                {
+                    $pull: { acceptFriends: idFriend },
+                }
+            );
+
+            // Xóa id của B trong requestFriends của A
+            await userModel.updateOne(
+                {
+                    _id: idFriend,
+                    status: 'active',
+                    deleted: false,
+                },
+                {
+                    $pull: { requestFriends: userId },
+                }
+            );
+        });
     });
 };
