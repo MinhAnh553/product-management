@@ -17,7 +17,7 @@ block main
 
         .row(list-user-accept)
             each user in users
-                .col-6 
+                .col-6(user-id=user.id)
                     div(class="box-user add")
                         div(class="inner-avatar")
                             img(

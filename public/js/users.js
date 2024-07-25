@@ -66,11 +66,12 @@ socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
         if (userId == data.user_id) {
             badgeUsersAccept.innerHTML = data.listAcceptLength;
 
+            const userRequest = data.userRequest;
             const listUserAccept = document.querySelector('[list-user-accept]');
             if (listUserAccept && data.type == 'add') {
-                const userRequest = data.userRequest;
                 const div = document.createElement('div');
                 div.classList.add('col-6');
+                div.setAttribute('user-id', userRequest._id);
                 div.innerHTML = `
                     <div class="box-user add">
                         <div class="inner-avatar">
@@ -146,6 +147,12 @@ socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
                         socket.emit('CLIENT_ACCEPT_FRIEND', idFriend);
                     });
                 }
+            }
+            if (listUserAccept && data.type == 'cancel') {
+                const boxUser = listUserAccept.querySelector(
+                    `[user-id='${userRequest._id}']`
+                );
+                listUserAccept.removeChild(boxUser);
             }
         }
     }

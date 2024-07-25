@@ -99,6 +99,7 @@ module.exports = async (userId) => {
             socket.broadcast.emit('SERVER_RETURN_USER_ACCEPT', {
                 user_id: idFriend,
                 listAcceptLength: listAcceptLength,
+                userRequest: userA,
                 type: 'cancel',
             });
         });
