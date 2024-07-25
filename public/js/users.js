@@ -66,6 +66,7 @@ socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
         if (userId == data.user_id) {
             badgeUsersAccept.innerHTML = data.listAcceptLength;
 
+            // Page accept
             const userRequest = data.userRequest;
             const listUserAccept = document.querySelector('[list-user-accept]');
             if (listUserAccept && data.type == 'add') {
@@ -73,7 +74,7 @@ socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
                 div.classList.add('col-6');
                 div.setAttribute('user-id', userRequest._id);
                 div.innerHTML = `
-                    <div class="box-user add">
+                    <div class="box-user">
                         <div class="inner-avatar">
                             <img
                                 src=${userRequest.avatar} ? ${userRequest.avatar} : "/images/avatar.png"
@@ -153,6 +154,17 @@ socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
                     `[user-id='${userRequest._id}']`
                 );
                 listUserAccept.removeChild(boxUser);
+            }
+
+            // Page not-friend
+            const listUserNotFriend = document.querySelector(
+                '[list-user-not-friend]'
+            );
+            if (listUserNotFriend && data.type == 'add') {
+                const boxUser = listUserNotFriend.querySelector(
+                    `[user-id="${userRequest._id}"]`
+                );
+                listUserNotFriend.removeChild(boxUser);
             }
         }
     }
