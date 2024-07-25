@@ -57,3 +57,96 @@ if (btnAcceptFriend) {
         });
     });
 }
+
+// SERVER_RETURN_USER_ACCEPT
+socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
+    const badgeUsersAccept = document.querySelector('[badge-users-accept]');
+    if (badgeUsersAccept) {
+        const userId = badgeUsersAccept.getAttribute('badge-users-accept');
+        if (userId == data.user_id) {
+            badgeUsersAccept.innerHTML = data.listAcceptLength;
+
+            const listUserAccept = document.querySelector('[list-user-accept]');
+            if (listUserAccept && data.type == 'add') {
+                const userRequest = data.userRequest;
+                const div = document.createElement('div');
+                div.classList.add('col-6');
+                div.innerHTML = `
+                    <div class="box-user add">
+                        <div class="inner-avatar">
+                            <img
+                                src=${userRequest.avatar} ? ${userRequest.avatar} : "/images/avatar.png"
+                                alt=${userRequest.avatar}
+                            />
+                        </div>
+                        <div class="inner-info">
+                            <div class="inner-name">${userRequest.fullName}</div>
+                            <div class="inner-buttons">
+                                <button
+                                    class="btn btn-sm btn-primary mx-1"
+                                    btn-accept-friend=${userRequest._id}
+                                >
+                                    Chấp nhận</button
+                                ><button
+                                    class="btn btn-sm btn-secondary mx-1"
+                                    btn-refuse-friend=${userRequest._id}
+                                >
+                                    Xóa</button
+                                ><button
+                                    class="btn btn-sm btn-secondary mx-1"
+                                    btn-deleted-friend=""
+                                    disabled=""
+                                >
+                                    Đã xóa</button
+                                ><button
+                                    class="btn btn-sm btn-secondary mx-1"
+                                    btn-accepted-friend=""
+                                    disabled=""
+                                >
+                                    Đã chấp nhận
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listUserAccept.appendChild(div);
+
+                // Refuse friend
+                const btnRefuseFriend = div.querySelector(
+                    '[btn-refuse-friend]'
+                );
+                if (btnRefuseFriend) {
+                    btnRefuseFriend.addEventListener('click', () => {
+                        const idFriend =
+                            btnRefuseFriend.getAttribute('btn-refuse-friend');
+
+                        btnRefuseFriend
+                            .closest('.box-user')
+                            .classList.add('refuse');
+
+                        // Socket
+                        socket.emit('CLIENT_REFUSE_FRIEND', idFriend);
+                    });
+                }
+
+                // Accepted friend
+                const btnAcceptFriend = div.querySelector(
+                    '[btn-accept-friend]'
+                );
+                if (btnAcceptFriend) {
+                    btnAcceptFriend.addEventListener('click', () => {
+                        const idFriend =
+                            btnAcceptFriend.getAttribute('btn-accept-friend');
+
+                        btnAcceptFriend
+                            .closest('.box-user')
+                            .classList.add('accepted');
+
+                        // Socket
+                        socket.emit('CLIENT_ACCEPT_FRIEND', idFriend);
+                    });
+                }
+            }
+        }
+    }
+});

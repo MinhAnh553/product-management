@@ -28,6 +28,30 @@ module.exports = async (userId) => {
                     $push: { requestFriends: idFriend },
                 }
             );
+
+            // SERVER_RETURN_USER_ACCEPT
+            const userA = await userModel
+                .findOne({
+                    _id: userId,
+                    status: 'active',
+                    deleted: false,
+                })
+                .select('fullName avatar');
+
+            const userB = await userModel.findOne({
+                _id: idFriend,
+                status: 'active',
+                deleted: false,
+            });
+
+            const listAcceptLength = userB.acceptFriends.length;
+
+            socket.broadcast.emit('SERVER_RETURN_USER_ACCEPT', {
+                user_id: idFriend,
+                listAcceptLength: listAcceptLength,
+                userRequest: userA,
+                type: 'add',
+            });
         });
 
         socket.on('CLIENT_CANCEL_FRIEND', async (idFriend) => {
@@ -54,6 +78,29 @@ module.exports = async (userId) => {
                     $pull: { requestFriends: idFriend },
                 }
             );
+
+            // SERVER_RETURN_USER_ACCEPT
+            const userA = await userModel
+                .findOne({
+                    _id: userId,
+                    status: 'active',
+                    deleted: false,
+                })
+                .select('fullName avatar');
+
+            const userB = await userModel.findOne({
+                _id: idFriend,
+                status: 'active',
+                deleted: false,
+            });
+
+            const listAcceptLength = userB.acceptFriends.length;
+
+            socket.broadcast.emit('SERVER_RETURN_USER_ACCEPT', {
+                user_id: idFriend,
+                listAcceptLength: listAcceptLength,
+                type: 'cancel',
+            });
         });
 
         socket.on('CLIENT_REFUSE_FRIEND', async (idFriend) => {
