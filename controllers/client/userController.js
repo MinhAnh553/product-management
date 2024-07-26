@@ -66,6 +66,23 @@ module.exports.loginUser = async (req, res) => {
             }
         );
 
+        await userModel.updateOne(
+            {
+                _id: user.id,
+            },
+            {
+                statusOnline: 'online',
+            }
+        );
+
+        // statusOnline
+        _io.once('connection', (socket) => {
+            socket.broadcast.emit('SERVER_RETURN_USER_STATUS', {
+                user_id: user.id,
+                status: 'online',
+            });
+        });
+
         req.flash('success', 'Đăng nhập thành công!');
         res.redirect('/');
     } else {
@@ -75,7 +92,25 @@ module.exports.loginUser = async (req, res) => {
 };
 
 // [GET] /user/logout
-module.exports.logoutUser = (req, res) => {
+module.exports.logoutUser = async (req, res) => {
+    const userId = res.locals.user.id;
+    // statusOnline
+    _io.once('connection', (socket) => {
+        socket.broadcast.emit('SERVER_RETURN_USER_STATUS', {
+            user_id: userId,
+            status: 'offline',
+        });
+    });
+
+    await userModel.updateOne(
+        {
+            _id: userId,
+        },
+        {
+            statusOnline: 'offline',
+        }
+    );
+
     res.clearCookie('tokenUser');
     res.redirect('/user/login');
 };

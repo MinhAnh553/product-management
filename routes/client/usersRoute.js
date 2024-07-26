@@ -9,4 +9,6 @@ Router.route('/request').get(usersController.request);
 
 Router.route('/accept').get(usersController.accept);
 
+Router.route('/friends').get(usersController.friends);
+
 module.exports = Router;

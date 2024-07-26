@@ -92,3 +92,29 @@ module.exports.accept = async (req, res) => {
         users: users,
     });
 };
+
+// [GET] /users/friends
+module.exports.friends = async (req, res) => {
+    const userId = res.locals.user.id;
+    const user = await userModel.findOne({
+        _id: userId,
+        status: 'active',
+        deleted: false,
+    });
+
+    let listFriendId = [];
+    for (const friend of user.friendList) {
+        listFriendId.push(friend.user_id);
+    }
+
+    const users = await userModel.find({
+        _id: { $in: listFriendId },
+        status: 'active',
+        deleted: false,
+    });
+    res.render('client/pages/users/friends', {
+        pageTitle: 'Danh sách bạn bè',
+        users: users,
+        myUserId: userId,
+    });
+};

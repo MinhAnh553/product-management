@@ -169,3 +169,16 @@ socket.on('SERVER_RETURN_USER_ACCEPT', (data) => {
         }
     }
 });
+
+// SERVER_RETURN_USER_STATUS
+socket.on('SERVER_RETURN_USER_STATUS', (data) => {
+    const listFriend = document.querySelector('[list-friend]');
+    if (listFriend) {
+        const boxUser = listFriend.querySelector(`[user-id="${data.user_id}"]`);
+        if (boxUser) {
+            boxUser
+                .querySelector('[status]')
+                .setAttribute('status', data.status);
+        }
+    }
+});
